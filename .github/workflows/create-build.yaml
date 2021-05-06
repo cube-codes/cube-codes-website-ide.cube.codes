@@ -11,13 +11,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: |
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip awscliv2.zip
-        sudo ./aws/install
-    - run: |
         version=$(cat "version")
         curl "https://github.com/cube-codes/cube-codes-framework/releases/download/$version/cube-codes-ide-$version-web.zip" -o "web.zip"
         unzip web.zip
+        aws --version
         ls -laR
 #
 # Download web archive
