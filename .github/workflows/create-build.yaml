@@ -15,9 +15,9 @@ jobs:
         bucket=cube-codes-website-ide-storage
         curl -L "https://github.com/cube-codes/cube-codes-framework/releases/download/${version}/cube-codes-ide-${version}-web.zip" -o "web.zip"
         unzip web.zip -d web
-        aws s3 rm s3://${bucket}/ --recursive --exclude "version/*"
-        aws s3 cp web s3://${bucket}/ --recursive --exclude "version/*"
-        aws s3 cp web s3://${bucket}/ --recursive --exclude "*" --include "version/*" --cache-control max-age=31536000
+        aws s3 rm s3://${bucket}/ --debug --recursive --exclude "version/*"
+        aws s3 cp web s3://${bucket}/ --debug --recursive --exclude "version/*"
+        aws s3 cp web s3://${bucket}/ --debug --recursive --exclude "*" --include "version/*" --cache-control max-age=31536000
       env:
         AWS_DEFAULT_REGION: eu-central-1
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
