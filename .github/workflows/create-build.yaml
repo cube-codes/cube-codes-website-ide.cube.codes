@@ -1,0 +1,28 @@
+name: Create Build
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install
+    - run: |
+        version=$(cat "version")
+        curl "https://github.com/cube-codes/cube-codes-framework/releases/download/$version/cube-codes-ide-$version-web.zip" -o "web.zip"
+        unzip web.zip
+        ls -laR
+#
+# Download web archive
+# Unzip archive
+# Delete from S3 everything that is not a version folder
+# Upload everything
+# - Set Cache for version folder
+# - Set No-Cache for else
