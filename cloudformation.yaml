@@ -38,6 +38,13 @@ Resources:
       BucketName: !Sub "${BucketNamePrefix}${AWS::StackName}-storage"
       WebsiteConfiguration:
         IndexDocument: index.html
+        RoutingRules:
+          - RedirectRule:
+              HostName: !Sub ${DomainName}
+              Protocol: https
+              ReplaceKeyPrefixWith: ""
+            RoutingRuleCondition:
+              KeyPrefixEquals: app/
   SiteDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
