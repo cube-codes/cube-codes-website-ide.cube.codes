@@ -12,9 +12,7 @@ jobs:
     - uses: actions/checkout@v2
     - run: |
         version=$(cat "version")
-        curl "https://github.com/cube-codes/cube-codes-framework/releases/download/${version}/cube-codes-ide-${version}-web.zip" -o "web.zip"
-        ls -la
-        cat web.zip
+        curl -L "https://github.com/cube-codes/cube-codes-framework/releases/download/${version}/cube-codes-ide-${version}-web.zip" -o "web.zip"
         unzip web.zip
         aws --version
         ls -laR
