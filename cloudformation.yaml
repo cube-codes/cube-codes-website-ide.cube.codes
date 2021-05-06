@@ -36,29 +36,8 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub "${BucketNamePrefix}${AWS::StackName}-storage"
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: true
-        BlockPublicPolicy: true
-        IgnorePublicAcls: true
-        RestrictPublicBuckets: true
-  SiteIdentity:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-    Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub "${AWS::StackName}-site-identity"
-  StorageReaderPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref Storage
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Action:
-              - "s3:GetObject"
-            Principal:
-              AWS: !Join ["", ["arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ", !Ref SiteIdentity]]
-            Resource: !Join ["", ["arn:aws:s3:::", !Ref Storage, "/*"]]
+      WebsiteConfiguration:
+        IndexDocument: index.html
   SiteDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -78,10 +57,10 @@ Resources:
         Enabled: true
         HttpVersion: http2
         Origins:
-        - DomainName: !GetAtt Storage.RegionalDomainName
+        - DomainName: !Sub "${Storage}.s3-website.${AWS::Region}.amazonaws.com"
           Id: Site
-          S3OriginConfig:
-            OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${SiteIdentity}"
+          CustomOriginConfig:
+            OriginProtocolPolicy: http-only
         PriceClass: PriceClass_All
         ViewerCertificate:
           AcmCertificateArn: !Ref CertificateArn
